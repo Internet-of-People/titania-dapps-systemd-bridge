@@ -1,0 +1,40 @@
+[{
+    "name": "iopcan",
+    "description": "Internet Of People Content Address Network",
+    "labels": [
+        "iop",
+        "ipfs",
+        "core"
+    ],
+    "website": "https://iop.global",
+    "repository": "https://github.com/Internet-of-People/iop-content-address-network",
+    "logo": "https://github.com/Internet-of-People/iop-resources/blob/master/logo/v2/logo_iop.png",
+    "ports": [{
+            "name": "swarm_tcp",
+            "port": 14001,
+            "protocol": "tcp"
+        },
+        {
+            "name": "swarm_udp",
+            "port": 14002,
+            "protocol": "udp"
+        },
+        {
+            "name": "api",
+            "port": 15001,
+            "protocol": "udp"
+        },
+        {
+            "name": "gateway",
+            "port": 18080,
+            "protocol": "udp"
+        }
+    ],
+    "env": {
+        "IOPCAN_PATH": {
+            "value": "/data/ipfs",
+            "description": "Where to strore IPFS data"
+        }
+    },
+    "image": "libertaria/iop-can:latest"
+}]
