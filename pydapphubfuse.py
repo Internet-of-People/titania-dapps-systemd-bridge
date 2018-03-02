@@ -79,7 +79,7 @@ Description={}
 '''.format(d['description'])
         
         # TODO: discriminate between TCP and UDP
-        ports = ('Wants=forward_port@%d.service' % port['port'] for port in d['ports'])
+        ports = ('Wants=forward_port@{port}/{protocol}.service'.format(**port) for port in d['ports'])
         conf += '\n'.join(ports)
 
         conf += '\n\n'
