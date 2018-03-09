@@ -78,19 +78,24 @@ class PydAppHubFuse(Operations):
 Description={}
 '''.format(d['description'])
         
-        # TODO: discriminate between TCP and UDP
-        ports = ('Wants=forward_port@{port}/{protocol}.service'.format(**port) for port in d['ports'])
+        # Port forwarding setup
+        ports = ('Wants=forward-port@{port}-{protocol}.service'.format(**port) for port in d['ports'])
         conf += '\n'.join(ports)
 
         conf += '\n\n'
 
         conf += '[Service]\n'
 
+        # Environment setup
         env = ('Environment={}={}'.format(env, val['value']) for env,val in d['env'].items())
         conf += '\n'.join(env)
-        conf += '\n# Making sure we overwrite previous value\n'
-        conf += 'Environment=DAPP_DOCKER_IMAGE=%s' % d['image']
 
+        # Providing image name and filename for dapp@.service to use
+        conf += '\n# Making sure we overwrite previous values\n'
+        conf += 'Environment=DAPP_DOCKER_IMAGE=%s\n' % d['image']
+        # Being explicit here so that we don't have to wrap in a shell script
+        conf += 'Environment=DAPP_DOCKER_IMAGE_FILE=%s\n' % d['image'].replace('/','_').replace(':','_')
+         
         conf += '\n'
 
         return conf
@@ -181,4 +186,4 @@ if __name__ == '__main__':
         print("Usage: ./pydapphubfuse.py /path/to/json /mount/point")
     # TODO: study if we need nothreads here
     else:
-        FUSE(PydAppHubFuse(sys.argv[2]), sys.argv[1], nothreads=True, foreground=True)
+        FUSE(PydAppHubFuse(sys.argv[1]), sys.argv[2], nothreads=True, foreground=True)
