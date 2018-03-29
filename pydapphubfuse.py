@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from fuse import FUSE, FuseOSError, Operations
+from fusepy import FUSE, FuseOSError, Operations
 import sys, errno, os, re, stat
 import json
 
@@ -79,7 +79,7 @@ Description={}
 '''.format(d['description'])
         
         # Port forwarding setup
-        ports = ('Wants=forward-port@{port}-{protocol}.service'.format(**port) for port in d['ports'])
+        ports = ('Wants=forward-port@{port}-{protocol}.service'.format(**port) for port in d['ports'] if port['type']=='public')
         conf += '\n'.join(ports)
 
         conf += '\n\n'
