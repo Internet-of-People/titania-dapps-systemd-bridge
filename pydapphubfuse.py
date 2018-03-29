@@ -186,4 +186,27 @@ if __name__ == '__main__':
         print("Usage: ./pydapphubfuse.py /path/to/json /mount/point")
     # TODO: study if we need nothreads here
     else:
-        FUSE(PydAppHubFuse(sys.argv[1]), sys.argv[2], nothreads=True, foreground=True)
+        driver = PydAppHubFuse(sys.argv[1])
+        # Uncomment for debugging
+        indent = 0
+        for m in dir(driver):
+            fun = getattr(driver,m) 
+            if m[0]!='_' and type(fun) is type(driver.fsync):
+                def trace_method(fun, name):
+                    def f(*args, **kwargs):
+                        global indent
+                        print("{}[TRACE]: {}({},{}) ".format('\t'*indent, name, args, kwargs))
+                        indent += 1
+                        try:
+                            res = fun(*args, **kwargs)
+                        except:
+                            indent -= 1
+                            print("{}exception".format('\t'*indent))
+                            raise
+                        indent -= 1
+                        print("{}return {}".format('\t'*indent,res))
+                        return res
+                    return f
+                setattr(driver, m, trace_method(fun, m))
+
+        FUSE(driver, sys.argv[2], nothreads=True, foreground=True)
