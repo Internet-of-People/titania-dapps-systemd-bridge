@@ -86,16 +86,19 @@ Description={}
 
         conf += '[Service]\n'
 
+        # Port publishing setup
+        # TODO: should we specify tcp/udp things?
+        conf += 'Environment=DAPP_DOCKER_PORTS="%s"' % ' '.join('-p{port}/{protocol}'.format(**port) for port in d['ports'])
+
         # Environment setup
-        env = ('Environment={}={}'.format(env, val['value']) for env,val in d['env'].items())
-        conf += '\n'.join(env)
+        #env = ('Environment={}={}'.format(env, val['value']) for env,val in d['env'].items())
+        #conf += '\n'.join(env)
 
         # Providing image name and filename for dapp@.service to use
         conf += '\n# Making sure we overwrite previous values\n'
         conf += 'Environment=DAPP_DOCKER_IMAGE=%s\n' % d['image']
         # Being explicit here so that we don't have to wrap in a shell script
-        conf += 'Environment=DAPP_DOCKER_IMAGE_FILE=%s\n' % d['image'].replace('/','_').replace(':','_')
-         
+        conf += 'Environment=DAPP_DOCKER_IMAGE_FILE=/var/lib/docker/preinstall/%s.tar\n' % d['image'].replace('/','_').replace(':','_')         
         conf += '\n'
 
         return conf
@@ -114,7 +117,7 @@ Description={}
         # Allow read/execute on / and valid dirs
         # read only on anything else
         isdir = type(obj) is not str
-        if (mode & os.W_OK) or (isdir and mode & os.X_OK):
+        if (mode & os.W_OK) or (not isdir and mode & os.X_OK):
             raise FuseOSError(errno.EACCES)
 
     # TODO: support reading by handle?
