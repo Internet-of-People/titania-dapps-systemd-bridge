@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-from fusepy import FUSE, FuseOSError, Operations
+try:
+    from fuse import FUSE, FuseOSError, Operations
+# For testing on Ubunut
+except ModuleNotFoundError:
+    from fusepy import FUSE, FuseOSError, Operations
 import sys, errno, os, re, stat
 import json
 
