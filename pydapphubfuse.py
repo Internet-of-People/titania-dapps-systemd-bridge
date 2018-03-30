@@ -7,10 +7,13 @@ except ModuleNotFoundError:
 import sys, errno, os, re, stat
 import json
 
-# Don't try to prononce the name of the class
-# I'm not liable for the daemons you might 
-# summon if you do.
 class PydAppHubFuse(Operations):
+    """
+    Don't try to prononce the name of the class
+    I'm not liable for the daemons you might 
+    summon if you do.
+    """
+
     def __init__(self, jsonroot):
         self.jsonroot = jsonroot
 
@@ -29,11 +32,14 @@ class PydAppHubFuse(Operations):
 
         self.dapps = { v['name']:v for v in jsonobj }
 
-    # Classifies the incoming path value:
-    #  - None = invalid path
-    #  - True = valid directory
-    #  - dapp name = valid dapp.conf, corresponding entry is returned
-    def classify(self, path):
+    def __classify(self, path):
+        """
+        Classifies the incoming path value:
+         - None = invalid path
+         - True = valid directory
+         - dapp name = valid dapp.conf, corresponding entry is returned
+        """
+
         # Root is a valid directory
         if path == '/':
             return True
@@ -60,9 +66,11 @@ class PydAppHubFuse(Operations):
 
         return None
 
-    # Same as above but automatically raises ENOENT
-    def getobj(self, path):
-        obj = self.classify(path)
+    def __getobj(self, path):
+        """
+        Same as __classify but automatically raises ENOENT
+        """
+        obj = self.__classify(path)
 
         # Cut what's not ours
         if not obj:
@@ -70,8 +78,11 @@ class PydAppHubFuse(Operations):
 
         return obj
 
-    # Generate config data
-    def genconfig(self, dapp):
+    def __genconfig(self, dapp):
+        """
+        Generates and return drop-in config data for a given dapp
+        """
+
         d = self.dapps[dapp]
 
         conf = '''#
@@ -107,16 +118,19 @@ Description={}
 
         return conf
 
-    # Get config file data for dapp
-    def getconfig(self, dapp):
+    def __getconfig(self, dapp):
+        """
+        Returns config data for a given dapp with lazy generation and cache/
+        """
+
         # Check cache
         if dapp not in self.cache:
-            self.cache[dapp] = self.genconfig(dapp)
+            self.cache[dapp] = self.__genconfig(dapp)
         # Okay we need to generate
         return self.cache[dapp]
 
     def access(self, path, mode):
-        obj = self.getobj(path)
+        obj = self.__getobj(path)
 
         # Allow read/execute on / and valid dirs
         # read only on anything else
@@ -127,12 +141,12 @@ Description={}
     # TODO: support reading by handle?
 
     def getattr(self, path, fh):
-        obj = self.getobj(path)
+        obj = self.__getobj(path)
         isdir = type(obj) is not str
 
         # TODO: meaningful values
         st_mode = (stat.S_IFDIR | 0o755) if isdir else (stat.S_IFREG | 0o644)
-        st_size = 0 if isdir else len(self.getconfig(obj))
+        st_size = 0 if isdir else len(self.__getconfig(obj))
         res = { 
             'st_atime': 0,
             'st_ctime': 0,
@@ -147,7 +161,7 @@ Description={}
         return res
 
     def readdir(self, path, fh):
-        obj = self.getobj(path)
+        obj = self.__getobj(path)
         # Can't list files
         if type(obj) is dict:
             raise FuseOSError(errno.EBADF)
@@ -165,11 +179,11 @@ Description={}
     # TODO: statfs
     # TODO: what if path doesn't mach definition?
     def open(self, path, flags):
-        obj = self.getobj(path)
+        obj = self.__getobj(path)
         # if type(obj) is not str: TODO then what???
         # TODO: not multithreading friendly
         self.lastfd += 1
-        self.filecache[self.lastfd] = self.getconfig(obj)
+        self.filecache[self.lastfd] = self.__getconfig(obj)
         return self.lastfd
 
     # TODO: here and below invalid descriptor error
