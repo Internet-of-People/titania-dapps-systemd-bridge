@@ -171,6 +171,6 @@
     ],
     "env": {
     },
-    "image": "libertaria/nginx:latest"
+    "image": "libertaria/nginx:armv7"
   }
 ]
