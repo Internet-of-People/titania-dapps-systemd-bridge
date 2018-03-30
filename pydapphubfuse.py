@@ -103,11 +103,13 @@ Description={}
 
         # Port publishing setup
         # TODO: should we specify tcp/udp things?
-        conf += 'Environment=DAPP_DOCKER_PORTS="%s"' % ' '.join('-p{port}/{protocol}'.format(**port) for port in d['ports'])
+        conf += 'Environment="DAPP_DOCKER_PORTS=%s"' % ' '.join('-p{port}/{protocol}'.format(**port) for port in d['ports'])
 
         # Environment setup
-        #env = ('Environment={}={}'.format(env, val['value']) for env,val in d['env'].items())
-        #conf += '\n'.join(env)
+        # NOTE: possible attack surface, can read variables from the host
+        # TODO: formalise which variables get automatically set (LAT/LON etc) for the container
+        conf += '\n'
+        conf += 'Environment="DAPP_DOCKER_ENV=%s"' % ' '.join('-e{}{}'.format(env,('=%s' % val['value']) if val['value'] else '') for env,val in d['env'].items() )
 
         # Providing image name and filename for dapp@.service to use
         conf += '\n# Making sure we overwrite previous values\n'
