@@ -14,9 +14,10 @@ class PydAppHubFuse(Operations):
     summon if you do.
     """
 
-    def __init__(self, jsonroot, systemdroot):
+    def __init__(self, jsonroot, systemdroot, dataroot):
         self.jsonroot = jsonroot
         self.systemdroot = systemdroot
+        self.dataroot = dataroot
 
         # Config file cache
         self.cache = {}
@@ -121,8 +122,13 @@ Description={}
         conf += '[Service]\n'
 
         # Port publishing setup
-        # TODO: should we specify tcp/udp things?
-        conf += 'Environment=DAPP_DOCKER_PORTS=%s' % ' '.join('-p{port}/{protocol}'.format(**port) for port in d['ports'])
+        conf += 'Environment="DAPP_DOCKER_PORTS=%s"' % ' '.join('-p{port}/{protocol}'.format(**port) for port in d['ports'])
+
+        # Volumes
+        # TODO: attack surface: paths containing spaces/quotes etc
+        # TODO: check that path is absolute
+        conf += '\n'
+        conf += 'Environment="DAPP_DOCKER_VOLUMES=%s"' % ' '.join('-v {0}/{1}{2}:{2}'.format(self.dataroot, d['id'], v) for v in d['volumes'])
 
         # Environment setup, passing the file instead of fragile shell string
         # TODO: formalise which variables get automatically set (LAT/LON etc) for the container
@@ -233,11 +239,11 @@ Description={}
 
 # Standalone operation
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print("Usage: ./pydapphubfuse.py /path/to/json /mount/point")
+    if len(sys.argv) < 4:
+        print("Usage: ./pydapphubfuse.py /path/to/json /mount/point /datafs/path")
     # TODO: study if we need nothreads here
     else:
-        driver = PydAppHubFuse(sys.argv[1], sys.argv[2])
+        driver = PydAppHubFuse(sys.argv[1], sys.argv[2], sys.argv[3])
         # Uncomment for debugging
         indent = 0
         for m in dir(driver):
