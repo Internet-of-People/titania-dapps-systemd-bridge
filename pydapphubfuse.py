@@ -143,6 +143,14 @@ Description={}
         conf += 'Environment=DAPP_DOCKER_IMAGE_FILE=/var/lib/docker/preinstall/%s.tar\n' % d['image'].replace('/','_').replace(':','_')         
         conf += '\n'
 
+        # TODO: remove this ASAP after dapps realize they can chown stuff on their own
+        # TODO: exploitable with shell injection
+        # Currently it's a terrible design
+        if 'volumechown' in d:
+            conf += 'Environment="DAPP_CHOWN_PATHS=%s"' % ' '.join('{}/{}{}'.format(self.dataroot, d['id'], v) for v in d['volumes'])
+            conf += '\n'
+            conf += 'Environment=DAPP_CHOWN_UID=%s' % d['volumechown']
+
         return conf
 
     def __getfile(self, dapp, ext):

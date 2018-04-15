@@ -44,6 +44,7 @@
     "volumes" :[
       "/data/ipfs"
     ],
+    "volumechown": 1000,
     "env": {
       "IOPCAN_PATH": {
         "value": "/data/ipfs",
@@ -164,6 +165,7 @@
     "volumes" :[
       "/data/locnet"
     ],
+    "volumechown": 1000,
     "image": "libertaria/iop-loc:latest"
   },
   {
