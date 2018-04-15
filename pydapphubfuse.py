@@ -30,7 +30,7 @@ class PydAppHubFuse(Operations):
         with open(jsonroot) as fp:
             jsonobj = json.load(fp)
 
-        self.dapps = { v['name']:v for v in jsonobj }
+        self.dapps = { v['id']:v for v in jsonobj }
 
     def __classify(self, path):
         """
@@ -46,7 +46,7 @@ class PydAppHubFuse(Operations):
         
         # Check if the directory corresponds to dapp pattern
         # TODO: what are valid dapp names and how they are named anyway?
-        m = re.match("^/dapp@([A-Za-z-_]+).service.d(/.*)?$", path)
+        m = re.match("^/dapp@([A-Za-z-_.]+).service.d(/.*)?$", path)
         if not m:
             return None
         dapp = m.group(1)

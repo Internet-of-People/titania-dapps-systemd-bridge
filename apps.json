@@ -1,10 +1,14 @@
 [
   {
-    "name": "iopcan",
+    "id" : "iop.global.iop.can",
+    "name": "IOP CAN",
     "description": "Internet Of People Content Address Network",
     "labels": [
       "iop",
       "ipfs",
+      "core"
+    ],
+    "tags" : [
       "core"
     ],
     "website": "https://iop.global",
@@ -28,6 +32,7 @@
         "port": 15001,
         "protocol": "udp",
         "type": "public"
+
       },
       {
         "name": "gateway",
@@ -36,19 +41,26 @@
         "type": "public"
       }
     ],
+    "volumes" :[
+      "/data/ipfs"
+    ],
     "env": {
       "IOPCAN_PATH": {
         "value": "/data/ipfs",
-        "description": "Where to strore IPFS data"
+        "description": "Where to store IPFS data"
       }
     },
     "image": "libertaria/iop-can:latest"
   },
   {
-    "name": "iopps",
+    "id" : "iop.global.iop.ps",
+    "name": "IOP PS",
     "description": "Internet Of People Profile Server",
     "labels": [
       "iop",
+      "core"
+    ],
+    "tags" : [
       "core"
     ],
     "website": "https://iop.global",
@@ -70,13 +82,18 @@
     ],
     "env": {
     },
+    "volumes" :[],
     "image": "libertaria/iop-ps:latest"
   },
   {
-    "name": "ioploc",
+    "id" : "iop.global.iop.loc",
+    "name": "IOP LOC",
     "description": "Internet Of People Location Server",
     "labels": [
       "iop",
+      "core"
+    ],
+    "tags" : [
       "core"
     ],
     "website": "https://iop.global",
@@ -99,7 +116,7 @@
         "name": "interprocess",
         "port": 16982,
         "protocol": "tcp",
-        "type": "public"
+        "type": "local"
       }
     ],
     "env": {
@@ -144,13 +161,20 @@
         "description": "GPS longitude of this server as real number from range (-180,180)"
       }
     },
+    "volumes" :[
+      "/data/locnet"
+    ],
     "image": "libertaria/iop-loc:latest"
   },
   {
-    "name": "nginx",
+    "id" : "world.libertaria.nginx",
+    "name": "Nginx",
     "description": "TitaniaOS Nginx",
     "labels": [
       "core"
+    ],
+    "tags" : [
+      "helper"
     ],
     "website": "https://libertaria.global",
     "repository": "https://gitlab.libertaria.community/titania/nginx",
@@ -160,17 +184,18 @@
         "name": "http",
         "port": 80,
         "protocol": "tcp",
-        "type": "local"
+        "type": "public"
       },
       {
         "name": "https",
         "port": 443,
         "protocol": "tcp",
-        "type": "local"
+        "type": "public"
       }
     ],
     "env": {
     },
-    "image": "libertaria/nginx:armv7"
+    "volumes" :[]
+    ,"image": "libertaria/nginx:armv7"
   }
 ]
