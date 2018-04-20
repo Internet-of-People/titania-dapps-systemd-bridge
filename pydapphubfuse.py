@@ -122,7 +122,7 @@ Description={}
         conf += '[Service]\n'
 
         # Port publishing setup
-        conf += 'Environment="DAPP_DOCKER_PORTS=%s"' % ' '.join('-p{port}/{protocol}'.format(**port) for port in d['ports'])
+        conf += 'Environment="DAPP_DOCKER_PORTS=%s"' % ' '.join('-p{port}:{port}/{protocol}'.format(**port) for port in d['ports'])
 
         # Volumes
         # TODO: attack surface: paths containing spaces/quotes etc
