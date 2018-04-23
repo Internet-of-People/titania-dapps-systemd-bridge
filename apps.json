@@ -234,15 +234,17 @@
   "logo": "https://navcoin.org/wp-content/uploads/2017/03/logo-mark.png",
   "ports": [{
     "name": "http",
+    "dapp_port": 80,
     "port": 40080,
     "protocol": "tcp",
-    "type": "public"
+    "type": "local"
   },
     {
       "name": "https",
+      "dapp_port": 443,
       "port": 40443,
       "protocol": "tcp",
-      "type": "public"
+      "type": "local"
     },
     {
       "name": "navcoin",
