@@ -191,7 +191,7 @@
     ],
     "env": {},
     "volumes": ["/usr/html"],
-    "image": "libertaria/nginx:armv7"
+    "image": "libertaria/nginx:dapp_test"
   },
   {
     "id" : "world.libertaria.dapp",
