@@ -128,13 +128,15 @@ Description={}
             return '-p{}{}:{}/{}'.format(dapp_ip, pobject['port'], dapp_port, pobject['protocol']) 
 
         # Port publishing setup
-        conf += 'Environment="DAPP_DOCKER_PORTS=%s"' % ' '.join(gen_port_spec(port) for port in d['ports'])
+        if 'ports' in d and d['ports']:
+            conf += 'Environment="DAPP_DOCKER_PORTS=%s"' % ' '.join(gen_port_spec(port) for port in d['ports'])
 
         # Volumes
         # TODO: attack surface: paths containing spaces/quotes etc
         # TODO: check that path is absolute
         conf += '\n'
-        conf += 'Environment="DAPP_DOCKER_VOLUMES=%s"' % ' '.join('-v {0}/{1}{2}:{2}'.format(self.dataroot, d['id'], v) for v in d['volumes'])
+        if 'volumes' in d and d['volumes']:
+            conf += 'Environment="DAPP_DOCKER_VOLUMES=%s"' % ' '.join('-v {0}/{1}{2}:{2}'.format(self.dataroot, d['id'], v) for v in d['volumes'])
 
         # Environment setup, passing the file instead of fragile shell string
         # TODO: formalise which variables get automatically set (LAT/LON etc) for the container

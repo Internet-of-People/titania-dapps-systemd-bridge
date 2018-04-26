@@ -190,6 +190,7 @@
       }
     ],
     "env": {},
+    "volumes": [],
     "image": "libertaria/nginx:dapp_test"
   },
   {
