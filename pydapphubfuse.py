@@ -111,7 +111,7 @@ class PydAppHubFuse(Operations):
 #
 [Unit]
 Description={}
-'''.format(d['description'])
+'''.format(d['name'])
         
         # Port forwarding setup
         ports = ('Wants=forward-port@{port}-{protocol}.service'.format(**port) for port in d['ports'] if port['type']=='public')
