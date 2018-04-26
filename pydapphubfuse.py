@@ -124,12 +124,11 @@ Description={}
         # Function to build a -p option
         def gen_port_spec(pobject):
             dapp_port = pobject.get('dapp_port', pobject['port'])
-            dapp_ip = 'localhost:' if pobject['type'] == 'internal' else ''
-            return '-p{}{}:{}/{}'.format(dapp_ip, pobject['port'], dapp_port, pobject['protocol']) 
+            return '-p{}:{}/{}'.format(pobject['port'], dapp_port, pobject['protocol']) 
 
         # Port publishing setup
         if 'ports' in d and d['ports']:
-            conf += 'Environment="DAPP_DOCKER_PORTS=%s"' % ' '.join(gen_port_spec(port) for port in d['ports'])
+            conf += 'Environment="DAPP_DOCKER_PORTS=%s"' % ' '.join(gen_port_spec(port) for port in d['ports'] if port['type'] != 'internal')
 
         # Volumes
         # TODO: attack surface: paths containing spaces/quotes etc
