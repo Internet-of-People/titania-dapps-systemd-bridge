@@ -54,7 +54,7 @@
   {
     "id": "global.iop.ps",
     "name": "IOP PS",
-    "description": "",
+    "description": "Profile servers form a network of servers that hold information about identity profiles of end users and client applications and allow these identities to find and interact with each other.",
     "labels": [
       "iop",
       "core"
