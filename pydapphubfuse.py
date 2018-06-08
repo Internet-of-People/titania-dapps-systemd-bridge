@@ -144,8 +144,10 @@ Description={}
         conf += 'Environment=DAPP_DOCKER_ENV=--env-file={}/dapp@{}.service.d/dapp.env'.format(self.systemdroot,d['id'])
 
         # Providing image name and filename for dapp@.service to use
-        conf += '\n# Making sure we overwrite previous values\n'
-        conf += 'Environment=DAPP_DOCKER_IMAGE=%s\n' % d['image']
+        # conf += '\n# Making sure we overwrite previous values\n'
+        # conf += 'Environment=DAPP_DOCKER_IMAGE=%s\n' % d['image']
+
+        # TODO: consider removal
         # Being explicit here so that we don't have to wrap in a shell script
         conf += 'Environment=DAPP_DOCKER_IMAGE_FILE=/var/lib/docker/preinstall/%s.tar\n' % d['image'].replace('/','_').replace(':','_')         
         conf += '\n'
