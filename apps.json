@@ -205,7 +205,7 @@
   ],
   "website": "https://navcoin.org/",
   "repository": "https://gitlab.libertaria.community/titania/dApp",
-  "logo": "https://navcoin.org/wp-content/uploads/2017/03/logo-mark.png",
+  "logo": "https://libertaria.world/wp-content/uploads/2017/12/navcoin-logo.png",
   "ports": [{
     "name": "http",
     "port": 80,
