@@ -1,4 +1,4 @@
-# pydapphubfuse
+# dapp-systemd-bridge
 
 Demonstrator for generating dApp Hub to FUSE filesystem bindings. Written in Python for prototyping, intended to be rendered in Rust at later time.
 
@@ -12,5 +12,5 @@ TODO: if it turns out per testing that systemd needs to write in `/run` drop-in 
 
 For demonstration, run as:
 ```
-./pydapphubfuse.py path/to/dapphub.json /mount/directory
+./dapp-systemd-bridge.py path/to/dapphub.json /mount/directory
 ```
