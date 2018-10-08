@@ -1,3 +1,8 @@
+# THIS REPO HAS BEEN MERGED INTO titania-os
+
+
+Old README:
+
 # dapp-systemd-bridge
 
 Demonstrator for generating dApp Hub to FUSE filesystem bindings. Written in Python for prototyping, intended to be rendered in Rust at later time.
