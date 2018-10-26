@@ -1,9 +1,8 @@
-# THIS REPO HAS BEEN MERGED INTO titania-os
+# titania-dapps-systemd-bridge has been [merged](https://github.com/libertaria-project/titania-os) to libertaria_project/titania-os repo
 
+You can find the latest version of source code inside the [titania-os](https://github.com/libertaria-project/titania-os/tree/develop/meta-titania/recipes-titania/dapp) repo.
 
-Old README:
-
-# dapp-systemd-bridge
+## dapp-systemd-bridge
 
 Demonstrator for generating dApp Hub to FUSE filesystem bindings. Written in Python for prototyping, intended to be rendered in Rust at later time.
 
